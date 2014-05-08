@@ -103,7 +103,7 @@ let s:shortCmdMap['h'] = 'help'
 " For these commands, we don't need to default to the current file, as these
 "   commands can work without any arguments.
 let s:curFileNotDefCmds = split('change,changes,client,files,integrate,job,' .
-      \ 'jobs,jobspec,labels,labelsync,opened,resolve,submit,user,', ',')
+      \ 'jobs,jobspec,labels,labelsync,opened,resolve,submit,user,set,', ',')
 " For these commands, we need to ask user for the argument, as we can't assume
 "   the current file is the default.
 let s:askUserCmds = split('admin,branch,counter,depot,fix,group,label,', ',')
@@ -2051,8 +2051,8 @@ function! s:GetClientInfo()
   endtry
   let g:p4ClientRoot = genutils#CleanupFileName(s:StrExtract(infoStr,
         \ '\CP4ROOT=[^ '."\n".']\+', 13))
-  let s:p4Client = s:StrExtract(infoStr, '\CP4CLIENT=[^ '."\n".']\+', 13)
-  let s:p4User = s:StrExtract(infoStr, '\CP4USER=[^ '."\n".']\+', 11)
+  let s:p4Client = s:StrExtract(infoStr, '\CP4CLIENT=[^ '."\n".']\+', 9)
+  let s:p4User = s:StrExtract(infoStr, '\CP4USER=[^ '."\n".']\+', 7)
 endfunction
 
 " Get/refresh filestatus for the specified buffer with optimizations.
@@ -2300,6 +2300,7 @@ function! s:PFImpl(clearBuffer, testMode) " {{{
   let s:errCode = 0
   let p4Options = s:GetP4Options()
   let fullCmd = s:CreateFullCmd(s:MakeP4ArgList(p4Options, 0))
+
   " Save the name of the current file.
   let p4OrgFileName = s:GetCurFileName()
 
